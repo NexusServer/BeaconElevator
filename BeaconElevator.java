@@ -13,6 +13,8 @@ import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.utils.Config;
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
+import cn.nukkit.command.Command;
+import cn.nukkit.command.CommandSender;
 
 import cn.nukkit.util.ArrayList;
 
@@ -55,21 +57,15 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  	 	  player.getLevel().setBlock(new Vector3(x,y+height-1,z),Block.get(0,0),true,false);
    	  	 	  player.setMotion(new Vector3(0.1,0.5,0.1));
    	  	 	  players.add(player);
-   	  	 	  if(!player.isSnicking()){
-   	  	 	  	 player.teleport(new Vector3(x,y+0.63,z));
-   	  	 	  }
    	  	 }
    	  	 player.teleport(new Vector3(x,y+height+0.63,z));
    	  	 player.remove(player);
    	  }
    	  if(this.config.exists(destin)){
    	  	 for(int e=0;e<=height;e++){
-   	  	 	  player.getLevel().setBlock(new Vector3(x,y+height-1,z),Block.get(0,0),true,false);
+   	  	 	  player.getLevel().setBlock(new Vector3(x,y-1,z),Block.get(0,0),true,false);
    	  	 	  player.setMotion(new Vector3(0.1,0.5,0.1));
    	  	 	  players.add(player);
-   	  	 	  if(!player.isSnicking()){
-   	  	 	  	 player.teleprot(new Vector3(x,y-0.63,z));
-   	  	 	  }
    	  	 }
    	  	 player.teleport(new Vector3(x,y+height-0.63,z));
    	  	 player.remove(player);
