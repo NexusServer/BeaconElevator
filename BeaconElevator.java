@@ -60,15 +60,17 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  	 }
    	  	 player.teleport(new Vector3(x,y+height+0.63,z));
    	  	 player.remove(player);
+   	  	 player.getLevel().setBlock(new Vector3(x,y-1,z),Block.get(Block.GLASS,0),true,false);
    	  }
    	  if(this.config.exists(destin)){
    	  	 for(int e=0;e<=height;e++){
    	  	 	  player.getLevel().setBlock(new Vector3(x,y-1,z),Block.get(0,0),true,false);
-   	  	 	  player.setMotion(new Vector3(0.1,0.5,0.1));
+   	  	 	  player.setMotion(new Vector3(0.1,-0.5,0.1));
    	  	 	  players.add(player);
    	  	 }
    	  	 player.teleport(new Vector3(x,y+height-0.63,z));
    	  	 player.remove(player);
+   	  	 player.getLevel().setBlock(new Vector3(x,y+height-1,z),Block.get(0,0),true,false);
    	  }
    }
    
