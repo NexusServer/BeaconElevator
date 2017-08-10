@@ -62,7 +62,7 @@ public class BeaconElevator extends PluginBase implements Listener{
    		 if(this.config.exists(location)){
 			int height=Integer.parseInt(this.config.get(location).toString());
 			for(int e=0;e<=height+110;e++){
-				player.getLevel().setBlock(new Vector3(x,y+height,z),Block.get(0,0),true,false);
+				player.getLevel().setBlock(new Vector3(x,y+height-1,z),Block.get(0,0),true,false);
 				player.setMotion(new Vector3(0,0.01,0));
 				players.add(player);
 			}
