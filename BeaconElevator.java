@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class BeaconElevator extends PluginBase implements Listener{
 	
 	 /*
-	 * Config:
+	 * config:
 	 * x;y;z;world : height
 	 */
 	
@@ -94,7 +94,7 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  	 if(args[0].equals("생성")||args[0].equalsIgnoreCase("c")){
    	  	 	  ff.add(player);
    	  	 	  sf.add(player);
-   	  	 	  player.sendMessage("§6[엘레베이터] 신호기(출발지점)를 클릭하고 도착지점을 터치해주세요.");
+   	  	 	  player.sendMessage("§6[엘레베이터] 신호기(출발지점)를 클릭한후 도착지점을 터치해주세요.");
    	  	 	  return true;
    	  	 }
    	  	 if(args[0].equals("삭제")||args[0].equalsIgnoreCase("d")){
@@ -114,6 +114,7 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  	 Player player=(Player)event.getEntity();
    	  	 if(players.contains(player)){
    	  	 	  event.setCancelled(true);
+   	  	 	  return;
    	  	 }
    	  }
    }
@@ -123,15 +124,17 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  if(players.contains(player)){
    	  	 if(ev.getReason()=="Flying is not enabled on this server"){
    	  	 	  ev.setCancelled(true);
+   	  	 	  return;
    	  	 }
    	  }
    }
    
    public void onTouch(PlayerInteractEvent event){
    	  Player player=event.getPlayer();
-   	  int x=event.getBlock().getFloorX();
-   	  int y=event.getBlock().getFloorY();
-   	  int z=event.getBlock().getFloorZ();
+   	  Block block=event.getBlock();
+   	  int x=block.getFloorX();
+   	  int y=block.getFloorY();
+   	  int z=block.getFloorZ();
    	  Level level=player.getLevel();
    	  String first=null;
    	  int first_y=0;
@@ -139,54 +142,53 @@ public class BeaconElevator extends PluginBase implements Listener{
    	  String location=String.valueOf(x)+String.valueOf(y)+String.valueOf(z)+world;
    	  int height=Integer.parseInt(this.config.get(location).toString());
    	  if(ff.contains(player)){
-   	  	 if(!(event.getBlock().getId()==Block.BEACON)){
-   	  	 	  player.sendTip("§e[엘레베이터] 신호기를 터치해주세요.");
-   	  	 	  event.setCancelled(true);
-   	  	 	  return;
-   	  	 }
-   	  	 if(this.config.exists(location)){
-   	  	 	  player.sendTip("§e[엘레베이터] 이미 존재하는 엘레베이터 입니다.");
-   	  	 	  event.setCancelled(true);
-   	  	 	  return;
-   	  	 }
-   	  	 first=location;
-   	  	 first_y=y;
-   	  	 player.sendTip("§6[엘레베이터] 도착지점을 터치해주세요.");
-   	  	 event.setCancelled(true);
-   	  	 ff.remove(player);
-   	  	 return;
-   	  }
-   	  if(sf.contains(player)){
-   	  	 if(first_y!=y){
-   	  	 	  player.sendTip("§e[엘레베이터] y좌표가 다릅니다.");
-   	  	 	  event.setCancelled(true);
-   	  	 	  return;
-   	  	 }
-   	  	 this.config.set(first,height);
-   	  	 player.sendTip("§6[엘레베이터] 엘레비에터가 생성되었습니다.");
-   	  	 event.setCancelled(true);
-   	  	 sf.remove(player);
-   	  	 first_y=0;
-   	  	 first="";
-   	  	 return;
-   	  }
-   	  if(del.contains(player)){
-   	  	 if(!(event.getBlock().getId()==Block.BEACON)){
-   	  	 	  player.sendTip("§e[엘레베이터] 신호기를 터치해주세요.");
-   	  	 	  event.setCancelled(true);
-   	  	 	  return;
-   	  	 }
-   	  	 if(this.config.exists(location)){
-   	  	 	  player.sendTip("§6[엘레베이터] 엘리베이터를 삭제합니다.");
-   	  	 	  this.config.remove(location);
-   	  	 	  event.setCancelled(true);
-   	  	 	  return;
-   	  	 }
-   	  	 first="";
-   	  	 first_y=0;
-   	  	 
-   	  	 ff.remove(player);
-   	  	 return;
+   		if(!(event.getBlock().getId()==Block.BEACON)){
+   			player.sendTip("§e[엘레베이터] 신호기를 터치해주세요.");
+   			event.setCancelled(true);
+   			return;
+   		}
+   		 if(this.config.exists(location)){
+   			player.sendTip("§e[엘레베이터] 이미 존재하는 엘레베이터 입니다.");
+   			event.setCancelled(true);
+   			return;
+   		}
+   		first=location;
+   		first_y=y;
+   		player.sendTip("§6[엘레베이터] 도착지점을 터치해주세요.");
+   		event.setCancelled(true);
+   		ff.remove(player);
+   		return;
+   	}
+   	if(sf.contains(player)){
+   		if(first_y!=y){
+   			player.sendTip("§e[엘레베이터] y좌표가 다릅니다.");
+   			event.setCancelled(true);
+   			return;
+   		}
+   		this.config.set(first,height);
+   		player.sendTip("§6[엘레베이터] 엘레베이터가 생성되었습니다.");
+   		event.setCancelled(true);
+   		sf.remove(player);
+   		first_y=0;
+   		first="";
+   		return;
+   	}
+   	if(del.contains(player)){
+   		if(!(event.getBlock().getId()==Block.BEACON)){
+   			player.sendTip("§e[엘레베이터] 신호기를 터치해주세요.");
+   			event.setCancelled(true);
+   			return;
+   		}
+   		if(this.config.exists(location)){
+   			player.sendTip("§6[엘레베이터] 엘레베이터를 삭제합니다.");
+   			this.config.remove(location);
+   			event.setCancelled(true);
+   			return;
+   		}
+   		first="";
+   		first_y=0;
+   		ff.remove(player);
+   		return;
    	  }
    }
 }
